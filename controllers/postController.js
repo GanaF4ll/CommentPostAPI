@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const textApiProvider = require("../providers/textAppProviders");
 
 // Méthode ListPosts
 exports.listAllPosts = async (req, res) => {
@@ -19,15 +20,32 @@ exports.listAllPosts = async (req, res) => {
 
 // Méthode CreatePost On créer le données
 exports.createAPost = async (req, res) => {
-  // On récupère ce qu'il y a dans la requete du client
-  const newPost = new Post(req.body);
+  // // On récupère ce qu'il y a dans la requete du client
+  // const newPost = new Post(req.body);
+
+  // try {
+  //   // On insère les données dans la base de donnée
+  //   const post = await newPost.save();
+  //   res.status(201).json(post);
+  // } catch (error) {
+  //   res.status(500).json({ message: "Erreur serveur" });
+  // }
 
   try {
-    // On insère les données dans la base de donnée
-    const post = await newPost.save();
+    let newPost = new Post(req.body);
+
+    let randomTextPromise = textApiProvider.getRandomText();
+    let response = await randomTextPromise;
+
+    if (!newPost.content) {
+      newPost.content = response;
+    }
+
+    let post = await newPost.save();
     res.status(201).json(post);
   } catch (error) {
-    res.status(500).json({ message: "Erreur serveur" });
+    console.error(error);
+    res.status(401).json({ message: "requete invalide" });
   }
 };
 
