@@ -95,7 +95,7 @@ exports.deleteAComment = async (req, res) => {
     if (comment) {
       // Si le commentaire existe (on le supprime)
       res.status(200);
-      res.json({ message: "Commentaire supprimer" });
+      res.json({ message: "Commentaire supprimé" });
     } else {
       // Si le commentaire n'éxiste plus
       res.status(200);
